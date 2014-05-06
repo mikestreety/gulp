@@ -55,9 +55,9 @@ var changeEvent = function(evt) {
 
 gulp.task('css', function(){
 	// Any extra stylesheets you wish to compile with - pass in an array
-    var vendorFiles = gulp.src('');
+	var vendorFiles = gulp.src('');
 
-    var appFiles = gulp.src(paths.styles.src + paths.styles.files)
+	var appFiles = gulp.src(paths.styles.src + paths.styles.files)
 	.pipe(plugins.rubySass({
 		style: sassStyle, sourcemap: sourceMap, precision: 2
 	}))
@@ -68,7 +68,7 @@ gulp.task('css', function(){
 	if(args.dev === true)
 		appFiles.pipe(gulp.dest(paths.styles.dest))
 
-    return es.concat(vendorFiles, appFiles)
+	return es.concat(vendorFiles, appFiles)
 		.pipe(plugins.concat('style.min.css'))
 		.pipe(plugins.autoprefixer(
 			'last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'
@@ -81,10 +81,10 @@ gulp.task('scripts', function(){
 		paths.scripts.src + 'scripts.js'
 	])
 	.pipe(plugins.concat('app.js'))
-    .pipe(gulp.dest(paths.scripts.dest))
-    .pipe(plugins.rename('app.min.js'))
-    .pipe(plugins.uglify())
-    .pipe(gulp.dest(paths.scripts.dest))
+	.pipe(gulp.dest(paths.scripts.dest))
+	.pipe(plugins.rename('app.min.js'))
+	.pipe(plugins.uglify())
+	.pipe(gulp.dest(paths.scripts.dest))
 });
 
 /*
