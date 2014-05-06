@@ -1,0 +1,8 @@
+{
+  "name": "braven",
+  "dependencies": {
+    "jquery": "~1.11",
+    "flexslider": "*",
+    "luigi": "develop"
+  }
+}
