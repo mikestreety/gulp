@@ -41,6 +41,7 @@ var displayError = function(error) {
 var sassStyle = 'compressed';
 var sourceMap = false;
 
+// Allows gulp --dev to be run for a more verbose output
 if(args.dev === true) {
 	sassStyle = 'expanded';
 	sourceMap = true;
@@ -53,6 +54,7 @@ var changeEvent = function(evt) {
 }
 
 gulp.task('css', function(){
+	// Any extra stylesheets you wish to compile with - pass in an array
     var vendorFiles = gulp.src('');
 
     var appFiles = gulp.src(paths.styles.src + paths.styles.files)
@@ -76,9 +78,7 @@ gulp.task('css', function(){
 
 gulp.task('scripts', function(){
 	gulp.src([
-		basePaths.bower + 'jquery/dist/jquery.js',
-		basePaths.bower + 'flexslider/jquery.flexslider-min.js',
-		paths.scripts.src + 'scripts.js',
+		paths.scripts.src + 'scripts.js'
 	])
 	.pipe(plugins.concat('app.js'))
     .pipe(gulp.dest(paths.scripts.dest))
