@@ -28,6 +28,16 @@ var paths = {
 	}
 }
 
+var sassStyle = 'compressed';
+var sourceMap = false;
+
+// Allows gulp --dev to be run for a more verbose output
+if(args.dev === true) {
+	sassStyle = 'expanded';
+	sourceMap = true;
+}
+
+// Functions for displaying various outputs
 var displayError = function(error) {
 	var errorString = '[' + error.plugin + ']';
 	errorString += ' ' + error.message.replace("\n",'');
@@ -36,15 +46,6 @@ var displayError = function(error) {
 	if(error.lineNumber)
 		errorString += ' on line ' + error.lineNumber;
 	console.error(errorString);
-}
-
-var sassStyle = 'compressed';
-var sourceMap = false;
-
-// Allows gulp --dev to be run for a more verbose output
-if(args.dev === true) {
-	sassStyle = 'expanded';
-	sourceMap = true;
 }
 
 var changeEvent = function(evt) {
