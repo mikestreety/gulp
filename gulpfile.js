@@ -66,9 +66,6 @@ gulp.task('css', function(){
 		displayError(err);
 	})
 
-	if(args.dev === true)
-		appFiles.pipe(gulp.dest(paths.styles.dest))
-
 	return es.concat(vendorFiles, appFiles)
 		.pipe(plugins.concat('style.min.css'))
 		.pipe(plugins.autoprefixer(
