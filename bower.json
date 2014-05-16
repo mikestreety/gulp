@@ -1,6 +1,6 @@
 {
-  "name": "boz",
+  "name": "bozboz",
   "dependencies": {
-    "luigi": "1.3.*"
+    "luigi": "~1.3.0"
   }
 }

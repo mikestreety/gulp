@@ -1,22 +1,11 @@
-var gulp = require('gulp');
-
-var args = require('yargs').argv;
-var es = require('event-stream');
-
-var plugins = require("gulp-load-plugins")({
-	pattern: ['gulp-*', 'gulp.*'],
-	replaceString: /\bgulp[\-.]/
-});
-
 var basePaths = {
-	src: './html/',
+	src: './public/assets/',
 	bower: './bower_components/'
 }
 var paths = {
 	styles: {
-		src: basePaths.src + 'css/sass/',
+		src: basePaths.src + 'sass/',
 		dest: basePaths.src + 'css/min/',
-		files: '**/*.scss'
 	},
 	sprite: {
 		src: basePaths.src + 'sprite/*',
@@ -28,13 +17,44 @@ var paths = {
 	}
 }
 
-var sassStyle = 'compressed';
-var sourceMap = false;
+var appFiles = {
+	styles: paths.styles.src + '**/*.scss',
+	scripts: [paths.scripts.src + 'scripts.js']
+}
+
+var vendorFiles = {
+	styles: '',
+	scripts: ''
+}
+
+var spriteConfig = {
+	imgName: 'sprite.png',
+	cssName: '_sprite.scss',
+	imgPath: '/assets/images/sprite.png', // Gets put in the css
+}
+
+/*
+	Let the magic begin
+*/
+
+var gulp = require('gulp');
+
+var args = require('yargs').argv;
+var es = require('event-stream');
+
+var plugins = require("gulp-load-plugins")({
+	pattern: ['gulp-*', 'gulp.*'],
+	replaceString: /\bgulp[\-.]/
+});
 
 // Allows gulp --dev to be run for a more verbose output
+var isProduction = true;
+var sassStyle = 'compressed';
+var sourceMap = false;
 if(args.dev === true) {
 	sassStyle = 'expanded';
 	sourceMap = true;
+	isProduction = false;
 }
 
 // Functions for displaying various outputs
@@ -50,15 +70,13 @@ var displayError = function(error) {
 
 var changeEvent = function(evt) {
 	console.log(
-		'[watcher] File ' + evt.path.replace(/.*(?=html)/,'') + ' was ' + evt.type + ', compiling...'
+		'[watcher] File ' + evt.path.replace(new RegExp('/.*(?=' + basePaths.src.replace('.', '') + ')/'), '') + ' was ' + evt.type + ', running...'
 	);
 }
 
 gulp.task('css', function(){
-	// Any extra stylesheets you wish to compile with - pass in an array
-	var vendorFiles = gulp.src('');
 
-	var appFiles = gulp.src(paths.styles.src + paths.styles.files)
+	var sassFiles = gulp.src(appFiles.styles)
 	.pipe(plugins.rubySass({
 		style: sassStyle, sourcemap: sourceMap, precision: 2
 	}))
@@ -66,23 +84,26 @@ gulp.task('css', function(){
 		displayError(err);
 	})
 
-	return es.concat(vendorFiles, appFiles)
+	return es.concat(gulp.src(vendorFiles.styles), sassFiles)
 		.pipe(plugins.concat('style.min.css'))
-		.pipe(plugins.autoprefixer(
-			'last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'
-		))
+		.pipe(plugins.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+		.pipe(plugins.if(isProduction, plugins.combineMediaQueries({
+			log: true
+		})))
+		.pipe(plugins.if(isProduction, plugins.cssmin()))
+		.pipe(plugins.size())
 		.pipe(gulp.dest(paths.styles.dest))
 });
 
 gulp.task('scripts', function(){
-	gulp.src([
-		paths.scripts.src + 'scripts.js'
-	])
-	.pipe(plugins.concat('app.js'))
-	.pipe(gulp.dest(paths.scripts.dest))
-	.pipe(plugins.rename('app.min.js'))
-	.pipe(plugins.uglify())
-	.pipe(gulp.dest(paths.scripts.dest))
+
+	return es.concat(gulp.src(vendorFiles.scripts), gulp.src(appFiles.scripts))
+		.pipe(plugins.concat('app.js'))
+		.pipe(gulp.dest(paths.scripts.dest))
+		.pipe(plugins.if(isProduction, plugins.uglify()))
+		.pipe(plugins.size())
+		.pipe(gulp.dest(paths.scripts.dest))
+
 });
 
 /*
@@ -90,9 +111,9 @@ gulp.task('scripts', function(){
 */
 gulp.task('sprite', function () {
 	var spriteData = gulp.src(paths.sprite.src).pipe(plugins.spritesmith({
-		imgName: 'sprite.png',
-		cssName: '_sprite.scss',
-		imgPath: '/assets/images/sprite.png', // Gets put in the css
+		imgName: spriteConfig.imgName,
+		cssName: spriteConfig.cssName,
+		imgPath: spriteConfig.imgPath,
 		cssVarMap: function (sprite) {
 			sprite.name = 'sprite-' + sprite.name;
 		}
@@ -102,7 +123,7 @@ gulp.task('sprite', function () {
 });
 
 gulp.task('watch', ['sprite', 'css', 'scripts'], function(){
-	gulp.watch(paths.styles.src + paths.styles.files, ['css'])
+	gulp.watch(appFiles.styles, ['css'])
 	.on('change', function(evt) {
 		changeEvent(evt)
 	});

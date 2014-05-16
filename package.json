@@ -1,14 +1,18 @@
 {
   "devDependencies": {
+    "event-stream": "^3.1.5",
     "gulp": "^3.5.6",
-    "gulp-ruby-sass": "^0.4.0",
     "gulp-autoprefixer": "0.0.6",
-    "gulp.spritesmith": "^0.3.0",
-    "gulp-load-plugins": "^0.4.0",
+    "gulp-combine-media-queries": "0.0.1",
     "gulp-concat": "^2.2.0",
-    "gulp-uglify": "^0.2.1",
+    "gulp-cssmin": "^0.1.5",
+    "gulp-if": "^1.2.0",
+    "gulp-load-plugins": "^0.4.0",
     "gulp-rename": "^1.2.0",
-    "yargs": "^1.2.1",
-    "event-stream": "^3.1.5"
+    "gulp-ruby-sass": "^0.4.0",
+    "gulp-size": "^0.3.1",
+    "gulp-uglify": "^0.2.1",
+    "gulp.spritesmith": "^0.3.0",
+    "yargs": "^1.2.1"
   }
 }
