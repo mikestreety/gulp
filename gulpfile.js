@@ -1,11 +1,11 @@
 var basePaths = {
 	src: './public/assets/',
 	bower: './bower_components/'
-}
+};
 var paths = {
 	styles: {
 		src: basePaths.src + 'sass/',
-		dest: basePaths.src + 'css/min/',
+		dest: basePaths.src + 'css/min/'
 	},
 	sprite: {
 		src: basePaths.src + 'sprite/*',
@@ -15,23 +15,23 @@ var paths = {
 		src: basePaths.src + 'js/src/',
 		dest: basePaths.src + 'js/min/'
 	}
-}
+};
 
 var appFiles = {
 	styles: paths.styles.src + '**/*.scss',
 	scripts: [paths.scripts.src + 'scripts.js']
-}
+};
 
 var vendorFiles = {
 	styles: '',
 	scripts: ''
-}
+};
 
 var spriteConfig = {
 	imgName: 'sprite.png',
 	cssName: '_sprite.scss',
-	imgPath: '/assets/images/sprite.png', // Gets put in the css
-}
+	imgPath: '/assets/images/sprite.png' // Gets put in the css
+};
 
 /*
 	Let the magic begin
@@ -51,6 +51,7 @@ var plugins = require("gulp-load-plugins")({
 var isProduction = true;
 var sassStyle = 'compressed';
 var sourceMap = false;
+
 if(args.dev === true) {
 	sassStyle = 'expanded';
 	sourceMap = true;
@@ -66,13 +67,13 @@ var displayError = function(error) {
 	if(error.lineNumber)
 		errorString += ' on line ' + error.lineNumber;
 	console.error(errorString);
-}
+};
 
 var changeEvent = function(evt) {
 	console.log(
 		'[watcher] File ' + evt.path.replace(new RegExp('/.*(?=' + basePaths.src.replace('.', '') + ')/'), '') + ' was ' + evt.type + ', running...'
 	);
-}
+};
 
 gulp.task('css', function(){
 
@@ -82,7 +83,7 @@ gulp.task('css', function(){
 	}))
 	.on('error', function(err){
 		displayError(err);
-	})
+	});
 
 	return es.concat(gulp.src(vendorFiles.styles), sassFiles)
 		.pipe(plugins.concat('style.min.css'))
@@ -92,7 +93,7 @@ gulp.task('css', function(){
 		})))
 		.pipe(plugins.if(isProduction, plugins.cssmin()))
 		.pipe(plugins.size())
-		.pipe(gulp.dest(paths.styles.dest))
+		.pipe(gulp.dest(paths.styles.dest));
 });
 
 gulp.task('scripts', function(){
@@ -102,7 +103,7 @@ gulp.task('scripts', function(){
 		.pipe(gulp.dest(paths.scripts.dest))
 		.pipe(plugins.if(isProduction, plugins.uglify()))
 		.pipe(plugins.size())
-		.pipe(gulp.dest(paths.scripts.dest))
+		.pipe(gulp.dest(paths.scripts.dest));
 
 });
 
@@ -125,12 +126,12 @@ gulp.task('sprite', function () {
 gulp.task('watch', ['sprite', 'css', 'scripts'], function(){
 	gulp.watch(appFiles.styles, ['css'])
 	.on('change', function(evt) {
-		changeEvent(evt)
+		changeEvent(evt);
 	});
 	gulp.watch(paths.scripts.src + '*.js', ['scripts'])
 	.on('change', function(evt) {
-		changeEvent(evt)
+		changeEvent(evt);
 	});
-})
+});
 
 gulp.task('default', ['css', 'scripts']);
