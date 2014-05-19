@@ -114,15 +114,23 @@ gulp.task('sprite', function () {
 	spriteData.css.pipe(gulp.dest(paths.styles.src));
 });
 
-gulp.task('watch', ['sprite', 'css', 'scripts'], function(){
-	gulp.watch(appFiles.styles, ['css'])
-	.on('change', function(evt) {
+gulp.task('images', function () {
+    gulp.src(paths.images.src + '*')
+	    .pipe(plugins.newer(paths.images.dest))
+        .pipe(plugins.imagemin())
+        .pipe(gulp.dest(paths.images.dest));
+});
+
+gulp.task('watch', ['sprite', 'css', 'scripts', 'images'], function(){
+	gulp.watch(appFiles.styles, ['css']).on('change', function(evt) {
 		changeEvent(evt);
 	});
-	gulp.watch(paths.scripts.src + '*.js', ['scripts'])
-	.on('change', function(evt) {
+	gulp.watch(paths.scripts.src + '*.js', ['scripts']).on('change', function(evt) {
+		changeEvent(evt);
+	});
+	gulp.watch(paths.images.src + '*', ['images']).on('change', function(evt) {
 		changeEvent(evt);
 	});
 });
 
-gulp.task('default', ['css', 'scripts']);
+gulp.task('default', ['css', 'scripts', 'images']);
