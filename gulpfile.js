@@ -4,17 +4,21 @@ var basePaths = {
 	bower: 'bower_components/'
 };
 var paths = {
+	images: {
+		src: basePaths.src + 'images/',
+		dest: basePaths.dest + 'images/min/'
+	},
+	scripts: {
+		src: basePaths.src + 'js/',
+		dest: basePaths.dest + 'js/min/'
+	},
 	styles: {
 		src: basePaths.src + 'sass/',
-		dest: basePaths.src + 'css/min/'
+		dest: basePaths.dest + 'css/min/'
 	},
 	sprite: {
 		src: basePaths.src + 'sprite/*',
-		dest: basePaths.src + 'images/'
-	},
-	scripts: {
-		src: basePaths.src + 'js/src/',
-		dest: basePaths.src + 'js/min/'
+		dest: basePaths.dest + 'images/'
 	}
 };
 
@@ -40,8 +44,8 @@ var spriteConfig = {
 
 var gulp = require('gulp');
 
-var args = require('yargs').argv;
 var es = require('event-stream');
+var gutil = require('gulp-util');
 
 var plugins = require("gulp-load-plugins")({
 	pattern: ['gulp-*', 'gulp.*'],
@@ -53,27 +57,14 @@ var isProduction = true;
 var sassStyle = 'compressed';
 var sourceMap = false;
 
-if(args.dev === true) {
+if(gutil.env.dev === true) {
 	sassStyle = 'expanded';
 	sourceMap = true;
 	isProduction = false;
 }
 
-// Functions for displaying various outputs
-var displayError = function(error) {
-	var errorString = '[' + error.plugin + ']';
-	errorString += ' ' + error.message.replace("\n",'');
-	if(error.fileName)
-		errorString += ' in ' + error.fileName;
-	if(error.lineNumber)
-		errorString += ' on line ' + error.lineNumber;
-	console.error(errorString);
-};
-
 var changeEvent = function(evt) {
-	console.log(
-		'[watcher] File ' + evt.path.replace(new RegExp('/.*(?=' + basePaths.src.replace('.', '') + ')/'), '') + ' was ' + evt.type + ', running...'
-	);
+	gutil.log('File', gutil.colors.cyan(evt.path.replace(new RegExp('/.*(?=/' + basePaths.src + ')/'), '')), 'was', gutil.colors.magenta(evt.type));
 };
 
 gulp.task('css', function(){
@@ -83,16 +74,16 @@ gulp.task('css', function(){
 		style: sassStyle, sourcemap: sourceMap, precision: 2
 	}))
 	.on('error', function(err){
-		displayError(err);
+		new gutil.PluginError('CSS', err, {showStack: true});
 	});
 
 	return es.concat(gulp.src(vendorFiles.styles), sassFiles)
 		.pipe(plugins.concat('style.min.css'))
 		.pipe(plugins.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-		.pipe(plugins.if(isProduction, plugins.combineMediaQueries({
+		.pipe(isProduction ? plugins.combineMediaQueries({
 			log: true
-		})))
-		.pipe(plugins.if(isProduction, plugins.cssmin()))
+		}) : gutil.noop())
+		.pipe(isProduction ? plugins.cssmin() : gutil.noop())
 		.pipe(plugins.size())
 		.pipe(gulp.dest(paths.styles.dest));
 });
@@ -102,10 +93,9 @@ gulp.task('scripts', function(){
 	return es.concat(gulp.src(vendorFiles.scripts), gulp.src(appFiles.scripts))
 		.pipe(plugins.concat('app.js'))
 		.pipe(gulp.dest(paths.scripts.dest))
-		.pipe(plugins.if(isProduction, plugins.uglify()))
+		.pipe(isProduction ? plugins.uglify() : gutil.noop())
 		.pipe(plugins.size())
 		.pipe(gulp.dest(paths.scripts.dest));
-
 });
 
 /*
