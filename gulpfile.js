@@ -17,8 +17,7 @@ var paths = {
 		dest: basePaths.dest + 'css/min/'
 	},
 	sprite: {
-		src: basePaths.src + 'sprite/*',
-		dest: basePaths.dest + 'images/'
+		src: basePaths.src + 'sprite/*'
 	}
 };
 
@@ -35,7 +34,7 @@ var vendorFiles = {
 var spriteConfig = {
 	imgName: 'sprite.png',
 	cssName: '_sprite.scss',
-	imgPath: '/assets/images/sprite.png' // Gets put in the css
+	imgPath: '/assets/images/min/sprite.png' // Gets put in the css
 };
 
 /*
@@ -110,7 +109,7 @@ gulp.task('sprite', function () {
 			sprite.name = 'sprite-' + sprite.name;
 		}
 	}));
-	spriteData.img.pipe(gulp.dest(paths.sprite.dest));
+	spriteData.img.pipe(gulp.dest(paths.images.dest));
 	spriteData.css.pipe(gulp.dest(paths.styles.src));
 });
 
