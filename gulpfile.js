@@ -1,6 +1,7 @@
 var basePaths = {
-	src: './public/assets/',
-	bower: './bower_components/'
+	src: 'app/assets/',
+	dest: 'public/assets/',
+	bower: 'bower_components/'
 };
 var paths = {
 	styles: {
