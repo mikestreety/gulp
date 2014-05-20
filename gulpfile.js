@@ -34,7 +34,7 @@ var vendorFiles = {
 var spriteConfig = {
 	imgName: 'sprite.png',
 	cssName: '_sprite.scss',
-	imgPath: images.basePaths.dest + 'sprite.png' // Gets put in the css
+	imgPath: paths.images.dest + 'sprite.png' // Gets put in the css
 };
 
 /*
