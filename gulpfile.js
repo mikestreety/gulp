@@ -89,12 +89,13 @@ gulp.task('css', function(){
 
 gulp.task('scripts', function(){
 
-	return es.concat(gulp.src(vendorFiles.scripts), gulp.src(appFiles.scripts))
+	gulp.src(vendorFiles.scripts.concat(appFiles.scripts))
 		.pipe(plugins.concat('app.js'))
 		.pipe(gulp.dest(paths.scripts.dest))
 		.pipe(isProduction ? plugins.uglify() : gutil.noop())
 		.pipe(plugins.size())
 		.pipe(gulp.dest(paths.scripts.dest));
+		
 });
 
 /*
