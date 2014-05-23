@@ -106,6 +106,9 @@ gulp.task('sprite', function () {
 		imgName: spriteConfig.imgName,
 		cssName: spriteConfig.cssName,
 		imgPath: spriteConfig.imgPath,
+		cssOpts: {
+			functions: false
+		},
 		cssVarMap: function (sprite) {
 			sprite.name = 'sprite-' + sprite.name;
 		}
