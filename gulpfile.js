@@ -124,6 +124,9 @@ gulp.task('watch', ['sprite', 'css', 'scripts'], function(){
 	gulp.watch(paths.scripts.src + '*.js', ['scripts']).on('change', function(evt) {
 		changeEvent(evt);
 	});
+	gulp.watch(paths.sprite.src, ['sprite']).on('change', function(evt) {
+		changeEvent(evt);
+	});
 });
 
 gulp.task('default', ['css', 'scripts']);
