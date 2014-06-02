@@ -91,7 +91,6 @@ gulp.task('scripts', function(){
 
 	gulp.src(vendorFiles.scripts.concat(appFiles.scripts))
 		.pipe(plugins.concat('app.js'))
-		.pipe(gulp.dest(paths.scripts.dest))
 		.pipe(isProduction ? plugins.uglify() : gutil.noop())
 		.pipe(plugins.size())
 		.pipe(gulp.dest(paths.scripts.dest));
