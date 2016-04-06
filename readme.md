@@ -7,5 +7,3 @@ A blog post explaining the whole file can be found on my website - [Advanced Gul
 ## Gulp with SVGs and Sprites
 
 I have somewhat progressed my workflow to include SVG sprites. The code for which can be found in [this repo](https://github.com/liquidlight/sass-gulp-svg-sprite) with a corresponding [blog post](https://www.liquidlight.co.uk/blog/article/creating-svg-sprites-using-gulp-and-sass/)
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mikestreety/gulp/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
