@@ -1,4 +1,4 @@
-#A Full Gulpfile
+# A Full Gulpfile
 
 This repo contains the current `gulpfile.js` I use, including pulling in Luigi with Bower.
 
