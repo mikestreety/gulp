@@ -1,7 +1,5 @@
 # An Advanced Gulpfile
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/P2ykVhzvaX3bnw1z9xZWvYSN/mikestreety/gulp'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/P2ykVhzvaX3bnw1z9xZWvYSN/mikestreety/gulp.svg' /></a>
-
 This repository is the full code accompanying the post on my blog *[Advanced Gulpfile](https://www.mikestreety.co.uk/blog/advanced-gulp-file)*.
 
 The repo contains the following files:
